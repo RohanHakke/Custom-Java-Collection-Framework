@@ -1,1 +1,189 @@
 
+import java.util.*;
+
+class UserIndexOutOfBoundsException extends RuntimeException{
+	UserIndexOutOfBoundsException() {
+        super();
+    }
+	UserIndexOutOfBoundsException(String message) {
+        super(message);
+    }
+}
+
+class UserNoSuchElementException extends RuntimeException{
+	UserNoSuchElementException(){
+		super();
+	}
+}
+
+class UserLinkedList<E>{
+	private int indx;
+	private Node<E> head;
+	private Node<E> tail;
+	private class Node<E>{
+		E ele;
+		Node<E> next;
+		public Node(E ele){
+			this.ele = ele;
+		}
+	}
+
+	@Override
+	public String toString(){
+		if(indx == 0) return "[]";
+		Node<E> curEle = head;
+		String res = "[";
+		while(curEle.next!=null){
+			res+=curEle.ele+", ";
+			curEle = curEle.next;
+		}
+		res+=curEle.ele+"]";
+		return res;
+	}
+
+	public boolean add(E ele){
+		Node<E> newNode = new Node(ele);
+		if(indx==0){
+			head=newNode;
+			tail = newNode;
+			indx++;
+		}else{
+			tail.next = newNode;
+			tail = newNode;
+			indx++;
+		}
+		return true;
+	}
+
+	public void addLast(E ele){
+		add(ele);
+	}
+
+	public void addFirst(E ele){
+		Node<E> newNode  =  new Node<E>(ele);
+		newNode.next = head;
+		head = newNode;
+		indx++;
+	}
+
+	public int size(){
+		return indx;
+	}
+
+	public E getFisrt(){
+		if(indx==0) throw new UserNoSuchElementException();
+		return head.ele;
+	}
+
+	public E getLast(){
+		if(indx==0) throw new UserNoSuchElementException();
+		return tail.ele;
+	}
+
+	public boolean isEmpty(){
+		return size()==0;
+	}
+
+	public E removeFirst(){
+		if(indx==0) throw new UserNoSuchElementException();
+		E ele = head.ele;
+		head = head.next;
+		indx--;
+		if(indx==0) tail = null;
+		return ele;
+	}
+
+	public E removeLast(){
+		if(indx==0) throw new UserNoSuchElementException();
+		E ele = tail.ele;
+		if(indx == 1) head=tail = null;
+		else{
+			Node<E> curNode = head;
+			while(curNode.next!=tail){
+				curNode = curNode.next;
+			}
+			curNode.next = null;
+			tail = curNode;
+		}
+		indx--;
+		return ele;
+	}
+
+	public E get(int inx){
+		if(inx < 0 || inx>indx) throw new UserIndexOutOfBoundsException("Indx : "+indx + ", inx : "+inx);
+		Node<E> curNode = head;
+		for(int i = 0;i<inx;i++){
+			curNode = curNode.next;
+		}
+		return curNode.ele;
+	}
+
+	public E set(int inx,E ele){
+		if(inx < 0 || inx>indx) throw new UserIndexOutOfBoundsException("Indx : "+indx + ", inx : "+inx);
+		Node<E> curNode = head;
+		for(int i = 0;i<inx;i++){
+			curNode = curNode.next;
+		}
+		E oldEle = curNode.ele;
+		curNode.ele = ele;
+		return oldEle;
+	}
+
+	// public void add(int inx,E ele){
+	// 	if(inx < 0 || inx>indx) throw new UserIndexOutOfBoundsException("Indx : "+indx + ", inx : "+inx);
+	// 	if(inx==0) addFirst(ele);
+	// 	else if(indx==inx) addLast(ele);
+	// 	Node<E>
+
+
+	// }
+}
+
+class UserLinkedListDriver{
+	public static void main(String[] args) {
+		LinkedList<Integer> list2 = new LinkedList<>();
+		list2.add(10);
+		list2.add(20);
+		list2.add(30);
+		list2.add(40);
+		// list2.addFirst(100);
+		
+		System.out.println(list2);
+		// System.out.println(list2.isEmpty());
+		// System.out.println(list2.removeLast());
+		// list2.get(2);
+		// System.out.println(list2.get(0));
+		// System.out.println(list2.set(1,200));
+		// System.out.println(list2.set(4,500));
+		// list2.add(1,100);
+
+		System.out.println(list2);
+
+		System.out.println("------------------------");
+
+		UserLinkedList<Integer> list1 = new UserLinkedList<>();
+		list1.add(10);
+		list1.add(20);
+		list1.add(30);
+		list1.add(40);
+		// list1.addFirst(100);
+		System.out.println(list1);
+		// System.out.println(list1.isEmpty());
+		// System.out.println(list1.size());
+		// System.out.println(list1.getFisrt());
+		// System.out.println(list1.getLast());
+		// System.out.println(list1.removeFirst());
+		// System.out.println(list1.removeLast());
+		// System.out.println(list1.get(4));
+		System.out.println(list1.set(1,200));
+		// System.out.println(list1.set(4,500));
+		// System.out.println(list1.set(5,200));
+		// list1.add(0,100);
+		// list1.add(5,200);
+
+
+
+		System.out.println(list1);
+
+	}
+}
